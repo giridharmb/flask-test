@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <title>W3.CSS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"
+  ></script>
+
+  <script>
+  function myFunction() {
+        var x = document.getElementById("Demo");
+
+        if (x.className.indexOf("w3-show") == -1) {
+            x.className += " w3-show";
+        } else { 
+            x.className = x.className.replace(" w3-show", "");
+        }
+    }
+
+    var selected_cloud = {};
+    var selected_cloud_text = {};
+  </script>
+
+  </head>
+
+  
+  <body>
+    <div class="w3-container">
+      <h2>Table All</h2>
+      <p>
+        The w3-table-all class combines the w3-table, w3-bordered, w3-striped,
+        and w3-border classes:
+      </p>
+
+      <table class="w3-table-all">
+        <tr>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Points</th>
+        </tr>
+        <tr>
+          <td>Jill</td>
+          <td>Smith</td>
+          <td>50</td>
+        </tr>
+        <tr>
+          <td>Eve</td>
+          <td>Jackson</td>
+          <td>94</td>
+        </tr>
+        <tr>
+          <td>Adam</td>
+          <td>Johnson</td>
+          <td>67</td>
+        </tr>
+        <tr>
+          <td>Bo</td>
+          <td>Nilson</td>
+          <td>35</td>
+        </tr>
+      </table>
+
+      <div class="w3-container">
+        <h2>Input Card</h2>
+
+        <div class="w3-card-4">
+          <!-- x -->
+          <div class="w3-container w3-green">
+            <h2>Input Form</h2>
+          </div>
+
+          <div class="w3-container">
+            <p>
+              <input id="field_1" class="w3-input" type="text" />
+              <label>Field1</label>
+            </p>
+            <p>
+              <input id="field_2" class="w3-input" type="text" />
+              <label>Field2</label>
+            </p>
+          </div>
+        </div>
+        <!-- x -->
+
+      </div>
+
+      <div class="w3-container">
+          <h2>Clickable Dropdown</h2>
+          <p>Click on the button to open the dropdown menu.</p>
+          <div class="w3-dropdown-click">
+            <button onclick="myFunction()" class="w3-button w3-black">
+              Click Me!
+            </button>
+            <div id="Demo" class="w3-dropdown-content w3-bar-block w3-border">
+              <a href="#" class="w3-bar-item w3-button class_cloud_name">DATA1</a>
+              <a href="#" class="w3-bar-item w3-button class_cloud_name">DATA2</a>
+              <a href="#" class="w3-bar-item w3-button class_cloud_name">DATA3</a>
+            </div>
+          </div>
+
+          <p><button id="submit_data" class="w3-button w3-blue">Submit</button></p>
+
+        </div>
+    </div>
+  </body>
+</html>
+
+<script>
+$(document).ready(function(){
+
+    $(".class_cloud_name").click(function(){
+        selected_cloud = $(this);
+        selected_cloud_text = selected_cloud[0].innerText;
+        console.log(selected_cloud_text);
+
+    });
+
+    $("#submit_data").click(function(){
+        var text_field1 = $("#field_1").val();
+        var text_field2 = $("#field_2").val();
+
+        console.log(text_field1);
+        console.log(text_field2);
+
+        var payload = {"data1":text_field1, "data2": text_field2, "cloud": selected_cloud_text};
+
+        $.ajax({
+            type: "POST",
+            contentType: 'application/json',
+            url: window.location.origin + "/submit_handler",
+            timeout: 120000, // 120 secs
+            data: JSON.stringify(payload),
+            success: function (d) {
+                console.log("/submit_handler : SUCCESS");
+                console.log(d);
+                var response_json = d;
+                if (response_json["data"] === "successful") {
+                    alert("Success");
+                } else {
+                    alert("Failed");
+                }
+
+            },
+            error: function(e) {
+                console.log("/submit_handler : ERROR");
+                console.log(e);
+            }
+        }); // ajax
+    }); // click submit
+
+});
+</script>
